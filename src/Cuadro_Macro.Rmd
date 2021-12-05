@@ -1,0 +1,520 @@
+---
+title: "Políticas monetarias no convenciales en US y su efecto en Latinoamérica"
+subtitle: ""
+author: "Jesús Gustavo Hernández Herrerías"
+date: "2021"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+mainfont: Times New Roman
+fontsize: 10pt
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \floatplacement{figure}{H}
+  - \usepackage{pdflscape}
+  - \newcommand{\blandscape}{\begin{landscape}}
+  - \newcommand{\elandscape}{\end{landscape}}
+  - \usepackage[dvipsnames]{xcolor}
+  - \usepackage{multicol}
+  - \usepackage{enumitem}
+  - \usepackage{color}
+  - \usepackage{graphicx}
+  - \usepackage{epsfig}
+  - \usepackage{multirow}
+  - \usepackage{colortbl}
+  - \usepackage{geometry}
+  - \geometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+fig_caption: yes
+urlcolor: blue
+---
+\pagenumbering{arabic} 
+
+
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+```{r librerias, echo = FALSE, warning = FALSE, message = FALSE}
+library(tidyverse)
+library(magrittr)
+library(fixest)
+```
+
+
+
+```{r datos, include = FALSE, echo=FALSE}
+
+options(scipen = 999)
+
+# Sector financiero
+yields <- readxl::read_xlsx("data/raw/Datos.xlsx", sheet = "Yields", 
+                            col_types = c("date", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                          "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                          "numeric", "numeric", "numeric", "numeric", "numeric", "numeric",
+                                          "numeric", "numeric")) %>% 
+  select("Date", "Brazil", "Chile", "Colombia", "Mexico", "Peru")
+
+
+stock_market <- readxl::read_xlsx("data/raw/Datos.xlsx", sheet = "Headline stock market indices") %>% 
+  select("Date", "Brazil", "Chile", "Colombia", "Mexico", "Peru")
+
+fx <- readxl::read_xlsx("data/raw/Datos.xlsx", sheet = "FX DATA") %>% 
+  select("Date", "Brazil", "Chile", "Colombia", "Mexico", "Peru")
+
+# Sector real
+
+Debt_gdp <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "Debt_gdp")
+
+CDS_5y <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "CDS_5Y")
+
+CPI <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "CPI")
+
+Current_account <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "Current_account")
+
+GDP <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "GDP")
+
+Reserves <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "Reserves")
+
+Rate <- readxl::read_xlsx("data/raw/Datos_2.xlsx", sheet = "Rate")
+
+```
+
+
+
+```{r limpieza de bases de datos, include = FALSE, echo=FALSE}
+
+# Sector financiero
+
+yields <- yields %>% 
+  mutate(Change_yield_Brazil = lead(Brazil) - lag(Brazil), Change_yield_Chile = lead(Chile) - lag(Chile),
+         Change_yield_Colombia = lead(Colombia) - lag(Colombia), Change_yield_Mexico = lead(Mexico) - lag(Mexico),
+         Change_yield_Peru = lead(Peru) - lag(Peru)) %>% 
+  select(- Mexico, - Brazil, -Chile, - Colombia, - Peru) %>% 
+  pivot_longer(-Date, names_to = "Country", values_to = "Yields") 
+
+yields$Date <- as.Date(yields$Date, format = '%Y-%m-%d') 
+
+stock_market <- stock_market %>% 
+  mutate(Change_sm_Brazil = lead(Brazil) - lag(Brazil), Change_sm_Chile = lead(Chile) - lag(Chile),
+         Change_sm_Colombia = lead(Colombia) - lag(Colombia), Change_sm_Mexico = lead(Mexico) - lag(Mexico),
+         Change_sm_Peru = lead(Peru) - lag(Peru)) %>% 
+  select(- Mexico, - Brazil, -Chile, - Colombia, - Peru) %>% 
+  pivot_longer(-Date, names_to = "Country", values_to = "SI") 
+  
+stock_market$Date <- as.Date(stock_market$Date, format = '%Y-%m-%d') 
+
+
+
+fx <- fx %>% 
+  mutate(Change_fx_Brazil = lead(Brazil) - lag(Brazil), Change_fx_Chile = lead(Chile) - lag(Chile),
+         Change_fx_Colombia = lead(Colombia) - lag(Colombia), Change_fx_Mexico = lead(Mexico) - lag(Mexico),
+         Change_fx_Peru = lead(Peru) - lag(Peru)) %>% 
+  select(- Mexico, - Brazil, -Chile, - Colombia, - Peru) %>% 
+  pivot_longer(-Date, names_to = "Country", values_to = "FX") 
+
+fx$Date <- as.Date(fx$Date, format = '%Y-%m-%d') 
+
+
+
+yields <- yields %>%
+  mutate(D1 = case_when(Date == "2008-11-25" ~ 1, TRUE ~ 0), D2 = case_when(Date == "2008-12-02" ~ 1, TRUE ~ 0),
+         D3 = case_when(Date == "2008-12-16" ~ 1, TRUE ~ 0), D4 = case_when(Date == "2009-01-28" ~ 1, TRUE ~ 0),
+         D5 = case_when(Date == "2009-03-18" ~ 1, TRUE ~ 0), D6 = case_when(Date == "2010-08-10" ~ 1, TRUE ~ 0),
+         D7 = case_when(Date == "2010-08-27" ~ 1, TRUE ~ 0), D8 = case_when(Date == "2010-09-21" ~ 1, TRUE ~ 0),
+         D9 = case_when(Date == "2010-10-15" ~ 1, TRUE ~ 0), D10 = case_when(Date == "2010-11-03" ~ 1, TRUE ~ 0),
+         D11 = case_when(Date == "2011-08-09" ~ 1, TRUE ~ 0), D12 = case_when(Date == "2011-08-26" ~ 1, TRUE ~ 0),
+         D13 = case_when(Date == "2011-09-21" ~ 1, TRUE ~ 0), D14 = case_when(Date == "2012-08-22" ~ 1, TRUE ~ 0),
+         D15 = case_when(Date == "2012-08-31" ~ 1, TRUE ~ 0), D16 = case_when(Date == "2012-09-13" ~ 1, TRUE ~ 0),
+         D17 = case_when(Date == "2013-03-20" ~ 1, TRUE ~ 0), D18 = case_when(Date == "2013-05-01" ~ 1, TRUE ~ 0),
+         D19 = case_when(Date == "2013-05-22" ~ 1, TRUE ~ 0), D20 = case_when(Date == "2013-06-19" ~ 1, TRUE ~ 0),
+         D21 = case_when(Date == "2013-07-11" ~ 1, TRUE ~ 0), D22 = case_when(Date == "2013-10-30" ~ 1, TRUE ~ 0),
+         D23 = case_when(Date == "2013-12-18" ~ 1, TRUE ~ 0), D24 = case_when(Date == "2014-09-17" ~ 1, TRUE ~ 0),
+         D25 = case_when(Date == "2014-10-29" ~ 1, TRUE ~ 0))
+
+
+stock_market <- stock_market %>%
+  mutate(D1 = case_when(Date == "2008-11-25" ~ 1, TRUE ~ 0), D2 = case_when(Date == "2008-12-02" ~ 1, TRUE ~ 0),
+         D3 = case_when(Date == "2008-12-16" ~ 1, TRUE ~ 0), D4 = case_when(Date == "2009-01-28" ~ 1, TRUE ~ 0),
+         D5 = case_when(Date == "2009-03-18" ~ 1, TRUE ~ 0), D6 = case_when(Date == "2010-08-10" ~ 1, TRUE ~ 0),
+         D7 = case_when(Date == "2010-08-27" ~ 1, TRUE ~ 0), D8 = case_when(Date == "2010-09-21" ~ 1, TRUE ~ 0),
+         D9 = case_when(Date == "2010-10-15" ~ 1, TRUE ~ 0), D10 = case_when(Date == "2010-11-03" ~ 1, TRUE ~ 0),
+         D11 = case_when(Date == "2011-08-09" ~ 1, TRUE ~ 0), D12 = case_when(Date == "2011-08-26" ~ 1, TRUE ~ 0),
+         D13 = case_when(Date == "2011-09-21" ~ 1, TRUE ~ 0), D14 = case_when(Date == "2012-08-22" ~ 1, TRUE ~ 0),
+         D15 = case_when(Date == "2012-08-31" ~ 1, TRUE ~ 0), D16 = case_when(Date == "2012-09-13" ~ 1, TRUE ~ 0),
+         D17 = case_when(Date == "2013-03-20" ~ 1, TRUE ~ 0), D18 = case_when(Date == "2013-05-01" ~ 1, TRUE ~ 0),
+         D19 = case_when(Date == "2013-05-22" ~ 1, TRUE ~ 0), D20 = case_when(Date == "2013-06-19" ~ 1, TRUE ~ 0),
+         D21 = case_when(Date == "2013-07-11" ~ 1, TRUE ~ 0), D22 = case_when(Date == "2013-10-30" ~ 1, TRUE ~ 0),
+         D23 = case_when(Date == "2013-12-18" ~ 1, TRUE ~ 0), D24 = case_when(Date == "2014-09-17" ~ 1, TRUE ~ 0),
+         D25 = case_when(Date == "2014-10-29" ~ 1, TRUE ~ 0))
+
+fx <- fx %>%
+  mutate(D1 = case_when(Date == "2008-11-25" ~ 1, TRUE ~ 0), D2 = case_when(Date == "2008-12-02" ~ 1, TRUE ~ 0),
+         D3 = case_when(Date == "2008-12-16" ~ 1, TRUE ~ 0), D4 = case_when(Date == "2009-01-28" ~ 1, TRUE ~ 0),
+         D5 = case_when(Date == "2009-03-18" ~ 1, TRUE ~ 0), D6 = case_when(Date == "2010-08-10" ~ 1, TRUE ~ 0),
+         D7 = case_when(Date == "2010-08-27" ~ 1, TRUE ~ 0), D8 = case_when(Date == "2010-09-21" ~ 1, TRUE ~ 0),
+         D9 = case_when(Date == "2010-10-15" ~ 1, TRUE ~ 0), D10 = case_when(Date == "2010-11-03" ~ 1, TRUE ~ 0),
+         D11 = case_when(Date == "2011-08-09" ~ 1, TRUE ~ 0), D12 = case_when(Date == "2011-08-26" ~ 1, TRUE ~ 0),
+         D13 = case_when(Date == "2011-09-21" ~ 1, TRUE ~ 0), D14 = case_when(Date == "2012-08-22" ~ 1, TRUE ~ 0),
+         D15 = case_when(Date == "2012-08-31" ~ 1, TRUE ~ 0), D16 = case_when(Date == "2012-09-13" ~ 1, TRUE ~ 0),
+         D17 = case_when(Date == "2013-03-20" ~ 1, TRUE ~ 0), D18 = case_when(Date == "2013-05-01" ~ 1, TRUE ~ 0),
+         D19 = case_when(Date == "2013-05-22" ~ 1, TRUE ~ 0), D20 = case_when(Date == "2013-06-19" ~ 1, TRUE ~ 0),
+         D21 = case_when(Date == "2013-07-11" ~ 1, TRUE ~ 0), D22 = case_when(Date == "2013-10-30" ~ 1, TRUE ~ 0),
+         D23 = case_when(Date == "2013-12-18" ~ 1, TRUE ~ 0), D24 = case_when(Date == "2014-09-17" ~ 1, TRUE ~ 0),
+         D25 = case_when(Date == "2014-10-29" ~ 1, TRUE ~ 0))
+
+
+# Sector Real
+
+
+```
+
+
+
+**\textcolor{BlueViolet}{1    INTRODUCCIÓN}**
+
+Este trabajo tiene como objetivo analizar el impacto que tiene la implementación de políticas monetarias no convencionales en el periodo de 2008 a 2015 por parte de la Reserva Federal en Estados Unidos sobre los países de Latinoamérica. En primer lugar,  se estiman los efectos sobre los bonos gubernamentales, los tipos de cambio y los principales índices accionarios para 5 países de la región de Latinoamérica, este es un enfoque que toma en cuenta las reacciones de los países  a través de movimientos en ciertos activos financieros. En la segunda parte, se estima un modelo simple que mide la influencia de los fundamentales macroeconómicos específicos de cada país en la transmisión de las perturbaciones financieras de Estados Unidos.
+
+A lo largo de los trabajos que se han realizado sobre este tema, se pueden reconocer algunas similitudes. En primer lugar, estos instrumentos de política monetaria no convencional han contribuido a mejorar las condiciones financieras. En segundo lugar, los efectos subsecuentes de estos programas suelen ser menores con el paso del tiempo. Tercero, los principales canales de transmisión de la política monetaria no convencional son: 
+
+i.	Canal de balance de portafolio: La compra de activos de larga duración por parte de la Reserva Federal, bonos respaldados por hipotecas y bonos del gobierno, llevan a una disminución de la oferta de estos activos, lo que provoca una reducción en el rendimiento de los mismos y un efecto sustitución hacia otros activos de mayor riesgo en busca de mayor rendimiento, principalmente hacia mercados emergentes. Este efecto provoca una disminución en las primas de riesgo, incrementa el precio de los activos y disminuye los rendimientos en mercado emergentes.
+
+ii.	Canal de señalización: Cuando las expectativas de que la política monetaria acomodaticia permanecerá por cierto periodo de tiempo, manteniendo las tasas de referencia bajas, el componente de riesgo neutral del rendimiento de los bonos suele disminuir. El diferencial de tasas de interés con respecto a los mercados emergentes tiende a ser persistente, lo que provoca flujo de capitales hacía estos mercados.\footnote{Lavigne R., Sarker S. y Vasishtha G. (2014). Spillover Effects of Quantitative Easing on Emerging - Market Economies. [Documento en línea] Bank of Canada.} 
+
+iii.	Canal de tipo de cambio: La salida de flujos de Estados Unidos en busca de mayor rendimiento, provoca que el dólar se deprecie y con ello que la demanda por bienes y servicios foráneos disminuya en decremento de las exportaciones de mercados emergentes. La apreciación en las monedas de los países emergentes, ceteris paribus depende de la cantidad de flujos que entren a cada país.
+
+A lo largo del periodo que comprende entre 2008 – 2015 se observaron distintas fases de la política monetaria no convencional de la Reserva Federal, las compras de activos a gran escala (LSAP, por sus siglas en inglés), el programa de extensión de madurez (MEP, por sus siglas en inglés) y el periodo de disminución de compra de activos mejor conocido como “Taper Talk Period” que se caracterizó por ser un episodio de volatilidad en los mercados internacionales financieros. Los efectos que provocaron tanto en Estados Unidos como en los mercados emergentes fueron desiguales, tanto en la fase que se encontraba la política monetaria, así como las características particulares del país y su relación con Estados Unidos.
+
+La principal contribución de este trabajo es analizar si la política monetaria no convencional en Estados Unidos generó un impacto significativo para las economías de Latinoamérica. Los principales motivos por los cuáles se espera que el efecto para las economías de Latinoamérica sea significativo, es por su fuerte dependencia al dólar y, que en ocasiones, un gran porcentaje de su deuda se encuentran denominadas en esta moneda, vínculos financieros fuertes con Estados Unidos dentro de la región y la relevancia que para estos países representan las exportaciones de materias primas cuyos precios se encuentran denominados en dólares.
+
+La segunda contribución es identificar si el papel que juegan los fundamentales en condicionar la respuesta de los países de Latinoamérica a las políticas monetarias no convencionales de Estados Unidos difiere a lo largo de los distintos episodios.
+
+
+Los resultados de este trabajo son consistentes con la literatura. El análisis de datos panel bajo el estudio de eventos de política monetaria no convencional muestran un mayor efecto significativo para los precios de los activos de Latinoamérica con el primer anuncio de ciclo de expansión cuantitativa en el 2008 – 2009 y con el periodo de disminución de compra de activos en el 2013, así como una mayor respuesta para el rendimiento de los bonos soberanos y los tipos de cambio de las economías de Latinoamérica. De igual forma, las características de los países fueron más decisivas para explicar las diferencias en la reacción a los anuncios de QE que en respuesta a las noticias sobre el proceso de puesta a punto.
+
+
+
+
+**\textcolor{BlueViolet}{2   METODOLOGÍA}**
+
+
+
+**\textcolor{BlueViolet}{2.1   Estrategia empírica y descripción de variables}**
+
+El modelo se basa en el documento “The effects of US unconventional monetary policies in Latin America”\footnote{Borallo F., Hernando I. y Vallés J. (2016). The effects of US unconventional monetary policies. [Documento en línea] Banco de España. Madrid, España. Documentos de trabajo N.° 1606} de Fructoso Borallo, Ignacio Hernando y Javier Vallés del Banco de España donde a través de un modelo de estudio de eventos se analiza los efectos de los cambios de política monetaria en Estados Unidos.  La ecuación 5 muestra la forma funcional del modelo que se pretende analizar.
+
+Por simplicidad, se evita hacer la diferenciación que algunos otros estudios realizan, de distinguir en los anuncios entre el impacto y las intenciones futuras sobre la política y se procede a considerar estos eventos como no anticipados. 
+
+**1er modelo**
+
+\begin{equation}
+\Delta Y_{it} = \alpha_i+ \sum_{j=1}^{25}\beta_j D_j + \epsilon_{it}
+\end{equation}
+
+donde:
+
+$y_{it}$ el cambio de dos días en el precio de los activos (del día previo al día posterior)  $y_{it+1}- y_{it-1}$
+
+$\sum_{j=1}^{25}$ denota los anuncios de política monetaria contemplados para este análisis
+
+$\alpha_i$ denota un efecto fijo del país
+
+$D_j$ denota la dummy de cada evento
+
+$\beta_j$ denota el coeficiente asociado con la dummy de cada evento 
+
+**2do modelo**
+
+\begin{equation}
+\Delta Y_{ij} = \alpha_i+ \beta D_j^s + \gamma CC_{it-1} + \delta D_j^s CC_{it-1} +\epsilon_{it}
+\end{equation}
+
+donde: 
+
+$y_{ij}$ el cambio de dos días en el precio de los activos (del día previo al día posterior)  $y_{it+1}- y_{it-1}$ en el país $i$ en la fecha $j$
+
+$CC_{it-1}$ denota las características de los países
+
+$D_j^{s}$ denota la dummy de cada evento que fueron significativos en el primer modelo
+
+$D_j^{s}CC_{it-1}$ denota la interacción entre las dummies de los eventos significativos y las características de los países 
+
+**\textcolor{BlueViolet}{2.2   Identificación}**
+
+Es un modelo de datos panel que analiza el cambio en los mercados extranjeros después del anuncio de política monetaria, bajo el supuesto de que las noticias económicas no afectan la decisión de política en ese periodo corto de tiempo. 
+
+Por simplicidad, se evita hacer la diferenciación que algunos otros estudios realizan, de distinguir en los anuncios entre el impacto y las intenciones futuras sobre la política y se procede a considerar estos eventos como no anticipados. 
+
+**\textcolor{BlueViolet}{2.3   Descripción de datos}**
+
+Se utilizan datos diarios del 1 de octubre del 2008 al 24 de abril del 2015 para tres tipos de activos, rendimientos de los bonos soberanos de 10 años en moneda local, tipos de cambio bilateral relativo al dólar americano, índices bursátiles principales para 20 países de economías emergentes:
+ 
+ 
+\newlist{multiitem}{itemize}{1}
+\setlist[multiitem]{
+    label=\textbullet,
+    before=\begin{multicols}{2},
+    after=\end{multicols}
+}
+ 
+\begin{multiitem}
+    \item Brasil
+    \item Chile
+    \item Colombia
+    \item México
+    \item Perú
+\end{multiitem}
+
+
+De igual forma los fundamentales macroecónomicos que se incluyen son los siguientes: Proxy de crecimiento del PIB mensual, inflación mensual, Credit Default Swap de 5 años, tasa de política monetaria, deuda como proporción del PIB, cuenta corriente como proporción del PIB, reservas como proporción del PIB.
+
+La tabla 1 en el anexo, describe un conjunto de anuncios oficiales y discursos por parte de la Reserva Federal que se caracterizaron por incluir la implementación de instrumentos no convencionales de política monetaria desde noviembre del 2008, dentro de los eventos se consideran los siguientes:
+
+•	Las primeras dos compras de activos a gran escala en el 2008, 2009 y 2010 (LSAP – 1, LSAP – 2)
+
+•	El programa de extensión de madurez en el 2011 (MEP)
+
+•	La tercera compra de activos a gran escala en 2012 (LSAP – 3)
+
+•	El periodo de “Taper tantrum” que consistía en la disminución de compra de activos de mayo a octubre del 2013
+
+•	Algunos anuncios sobre el posible futuro de la política monetaria y discursos del presidente Ben Bernanke que pudieran provocar reacciones en el mercado
+
+
+**\textcolor{BlueViolet}{2.4   Estadísticos descriptivos}**
+
+i. Tipo de cambio con respecto al dólar
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País	& Obs.	& Media	& D.e.	& Min	& Max \\ \hline
+Brasil	& 1604 &	2.03	 & 0.33 &	1.53	& 3.29 \\
+Chile	& 1639	& 527.18 &	51.34 &	456.38 &	682.75 \\
+Colombia	& 1638 &	1968.22	& 206.55	& 1748.50	& 2687.79 \\
+México	& 1638	& 13.06	& 0.76	& 11.19	& 15.62 \\
+Perú	& 1631	& 2.81	& 0.15 &	2.53 &	3.25 \\ \hline
+    \end{tabular}
+    \caption{Tipo de cambio con respecto al dólar}
+  \end{center}
+\end{table}
+
+ii. Índice bursátil
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País	& Obs.	& Media	& D.e.	& Min	& Max \\ \hline
+Brasil	& 1572	& 28997.25	& 7939.61	& 12712.28	& 43713.74 \\
+Chile	& 1583	& 7.59 &	1.72 &	3.33 &	10.66 \\
+Colombia &	1553	& 6.59 &	1.53 &	2.69 &	8.94 \\
+México	& 1591	& 2782.22	& 557.51	& 1100.30	& 3680.45 \\
+Perú	& 1588 &	5999.74 &	1683.26 &	1944.81 &	9018.22 \\ \hline
+    \end{tabular}
+    \caption{Índice bursátil}
+  \end{center}
+\end{table}
+
+iii.	Rendimiento de los bonos soberanos de 10 años en moneda local 
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País	& Obs.	& Media	& D.e.	& Min	& Max \\ \hline
+Brasil	& 1253	& 11.86 &	1.43 & 	9.11	& 17.91 \\
+Chile	& 1019	& 5.37 &	0.55	& 3.98	& 7.22 \\
+Colombia	& 1122	& 7.22 & 1.54 &	4.69 &	13.81 \\
+México	& 1609	& 6.55	& 1.04	& 4.41	& 10.9 \\
+Perú	& 1252	& 5.70 &	0.96 &	3.94 & 10.05 \\ \hline
+    \end{tabular}
+    \caption{Rendimiento de los bonos soberanos de 10 años en moneda local }
+  \end{center}
+\end{table}
+
+iv. Proxy de crecimiento económico
+
+v. Cuenta corriente como % del PIB
+
+Se están terminando...
+
+**\textcolor{BlueViolet}{3   RESULTADOS}**
+
+
+1.	Mercados de bonos
+
+La tabla 6 y 7 muestra los principales resultados de los mercados de bonos.
+
+Las variaciones de los bonos fueron más significativas en el LSAP-1 con una disminución promedio de 28 puntos básicos.
+
+2.	Tipos de cambio
+
+La tabla 6 y 7 muestra los principales resultados para los tipos de cambio.
+
+En el LSAP-1 los datos resultaron ser más significativos, a pesar de que en algunas fechas los signos de los coeficientes no tuvieron los resultados esperados, se puede observar un efecto de depreciación (signo positivo) y posteriormente una apreciación en el 2009.
+
+Esto se puede explicar debido a que en un principio los inversionistas comenzaron a mover los capitales hacia activos más seguros, para después mediante un rebalanceo de portafolios buscar rendimiento en los países emergentes y principalmente en aquellos que tuvieran un mayor diferencial de tasas como en el caso de México y Brasil. 
+
+De igual forma el periodo del segundo semestre del 2013 cuando se comenzaba a sugerir la moderación o el final de la política monetaria expansiva, tuvo un efecto significativo depreciando las monedas.
+
+3.	Índices Bursátiles
+
+La tabla 6 y 7 muestra los principales resultados de los índices bursátiles.
+
+Se puede observar que los coeficientes en el LSAP-1 y LSAP-3 son positivos y significativos en los países de la muestra, lo que sugiere que flujos de países desarrollados como Estados Unidos comenzaron a entrar en otro tipo de instrumentos de países emergentes buscando un mayor rendimiento. Sin embargo, el 21 de septiembre del 2011 cuando la Reserva Federal anunció el programa de extensión de madurez oficialmente, se dieron disminuciones.
+
+
+4.- Modelo 2 con fundamentales macroeconómicos
+
+(Se está  terminando de limpiar la base de datos para correr el modelo y hacer inferencias de porque el caso de México podría destacar del pull de países)
+
+**\textcolor{BlueViolet}{4   ANEXOS}**
+
+
+\begin{table}[H]
+  \begin{center}
+  \resizebox{18cm}{18cm} {
+    \begin{tabular}{| m{3cm} | m{5cm} | m{15cm} |}
+      \hline
+\multicolumn{3}{|c|}{Juntas del Comité Federal de Mercado Abierto (CFMA) y eventos importantes (Nov 2008 - Oct 2014)} \\ \hline
+\rowcolor{Gray}\multicolumn{3}{|c|}{"First Large Scale Asset Purchase" (LSAP)} \\ \hline
+11/25/2008	 & Anuncio &	La Reserva Federal anuncia la compra de "Mortage Back Securities" respaldadas por agencias del gobierno y la creación del "Term Asset Backed Securities Loan Facility" \\
+12/01/2008	& Discurso (Austin)	& Bernanke da pistas de posibles futuras compras de bonos gubernamentales \\
+12/16/2008	& Declaración CFMA	& La Reserva Federal recorta la tasa de fondos federales a cero \\
+01/28/2009	& Declaración CFMA	& La Reserva Federal anuncia "Primary Dealer Credit Facility", "Term Securities Lending Facility" y AMLF \\
+03/18/2009	& Declaración CFMA &	La Reserva Federal extiende su programa de compras de MBS y anuncia el comienzo de compras de bonos gubernamentales \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Second LSAP"} \\ \hline
+08/10/2010	& Declaración CFMA &	La Reserva Federal anuncia sus intenciones de comprar bonos gubernamentales de largo plazo a través de la reinversión de los pagos de sus MBS \\
+08/27/2010	& Discurso (Jackson Hole) &	Discurso de Bernanke en Jackson Hole \\
+09/21/2010	& Declaración CFMA	& De acuerdo al CFMA, la tasa de interés de corto plazo se mantendrá en niveles bajos por un largo periodo de tiempo \\
+10/15/2010	& Discurso (Indiana) &	De acuerdo con el presidente de la Reserva Federal Bernanke, nuevas medidas podrían ser necesarias \\
+11/02/2010	& Declaración CFMA &	La Reserva Federal decide comprar 600 billones de dólares adicionales  de bonos gubernamentales de largo plazo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Maturity Extension Program" (MEP)} \\ \hline
+08/09/2011	& Declaración CFMA &	De acuerdo al CFMA, la tasa de interés de corto plazo se mantendrá en niveles bajos por un largo periodo de tiempo y tomarán nuevas medidas si resultan necesarias \\
+08/26/2011	& Discurso	& Discurso de Bernanke en Jackson Hole \\
+09/21/2011	& Declaración CFMA &	La Reserva Federal anuncia su "Maturity Expansion Program" \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Third LSAP"} \\ \hline
+08/22/2012	& Minutas CFMA &	La Reserva Federal tomará nuevas medidas en caso de ser necesarias \\
+08/31/2012	& Discurso (Jackson Hole) & El presidente de la Reserva Federal Bernanke sugiere nuevo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Quantitative Easing"} \\ \hline
+09/13/2012	& Declaración CFMA &	La Reserva Federal anuncia nuevo "Quantitative Easing"
+Eventos en el 2013 \\
+03/20/2013	& Declaración CFMA	& La Reserva Federal continuará con su política monetaria acomodaticia hasta que ciertos objetivos de desempleo e inflación sean alcanzados \\
+05/01/2013	& Declaración CFMA & 	CFMA: la política monetaria acomodaticia se mantendrá por un largo periodo de tiempo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Taper Talk Period"} \\ \hline
+05/22/2013	& Testimonio y minutas CFMA &	Bernake sugiere el final de la política monetaria expansiva \\
+06/19/2013	& Declaración CFMA	& La Reserva Federal sugiere que el periodo de disminución podría comenzar el próximo año \\
+07/11/2013	& Minutas CFMA y discurso(NBER)	& Bernanke dice que la política monetaria de flexibilización del banco central podría continuar en el futuro inmediato \\
+10/30/2013 & Declaración CFMA	& La Reserva Federal decide continuar con la política monetaria acomodaticia \\
+12/18/2013	& Declaración CFMA &	Periodo de disminución se anuncia oficialmente  \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{Eventos en el 2014} \\ \hline
+09/17/2014	& Declaración CFMA	& Anuncio de los principios y planes de normalización de la política \\
+10/29/2014 &	Declaración CFMA &	Concluye el periodo de disminución de compra de activos; empieza  un periodo indefinido de orientación hacia adelante \\ \hline
+    \end{tabular}
+  }
+    \caption{Anuncios oficiales y discursos oficiales de la reserva federal}
+  \end{center}
+\end{table}
+
+
+
+
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c |}
+      \hline
+\rowcolor{Gray}Variables	& Descripción	& Fuente \\ \hline
+Bonos soberanos	& 10 años en moneda local	& Bloomberg \\ \hline
+Tipo de cambio	& Bilateral con respecto al dólar	& Bloomberg \\ \hline
+Índices bursátiles	& Agregado	& Bloomberg \\ \hline
+Proxy crecimiento del PIB mensual & Variación anual & Bloomberg \\ \hline
+Inflación mensual & Variación anual & Bloomberg \\ \hline
+Credit default swap  & 5 años en USD & Bloomberg \\ \hline
+Tasa de política monetaria & Porcentaje & Bloomberg \\ \hline
+Cuenta corriente como proporción del PIB &  Porcentaje & Bloomberg \\ \hline
+Deuda como proporción del PIB & Porcentaje  & Bloomberg \\ \hline
+Reservas como proporción del PIB & Porcentaje & Bloomberg \\ \hline
+    \end{tabular}
+    \caption{Definición de variables}
+  \end{center}
+\end{table}
+
+
+
+**\textcolor{BlueViolet}{5   REFERENCIAS}**
+
+1.	Anaya, P., Hachula, M., Offermanns, C. (2015). Spillovers of U.S. Unconventional Monetary Policy to Emerging Markets: The Roles of Capital Flows. Freie Univerität Berlin, School of Business & Economics.
+2.	Bank for International Settlements (2014). The Transmission of unconventional monetary policy to the emerging markets. Bank of International Settlements. BIS Papers No. 78.
+3.	Baumesiter, C., Benati, L. (2013). Unconventional Monetary Policy and the Great Recession. Bank of Canada & Banque de France. 
+4.	Bhattarai, S., Chatterjee, A., Yong Park W. (2018). Effects of US Quantitative Easing on Emerging Market Economies. ABD Institute. ABDI Working Paper Series No.803.
+5.	Blanchard, O., (2012). Macroeconomía, Madrid, España: Pearson Educación, S.A.
+6.	Board of Governors of the Federal Reserve System. Conducting Monetary Policy. 15 de agosto de 2020. Disponible en: https://www.federalreserve.gov/
+7.	Borallo, F., Hernando, I., Vallés, J. (2016). The effects of US Unconventional Monetary Policies in Latin America. Banco de España. Documentos de Trabajo No. 1606.
+8.	Borio, C., Disyatat, P. (2009). Unconventional monetary policies: an appraisal. B Bank of International Settlements. BIS Papers No. 292.
+9.	Carrillo, J. (2018). Dinero [Diapositiva de PowerPoint]. 
+10.	 Chen, J., Mancini – Griffoli, T., Sahay. R. (2014). Spillovers from United States Monetary Policy on Emerging Markets: Different This Time?. IMF Working Paper No. 14/240.
+11.	Chen, Q., Filardo, A., He, D., Zhu, F. (2015). Financial crisis, US unconventional monetary policy and international spillovers. Bank of International Settlements. BIS Papers No. 494.
+12.	Engen, E., Laubach, T., Reifschneider, D. (2015). The Macroeconomic Effects of the Federal Reserve’s Unconventional Monetary Policies. Finance and Economics Discussion Series Divisions of Research & Statistics and Monetary Affairs Federal Reserve Board, Washington, D.C. Working Paper No. 005.
+13.	Gambacorta, L., Hofmann, B., Perrsman, G. (2014). The effectiveness of Unconventional Monetary Policy at the Zero Lower Bound: A Cross – Country Analysis. The Ohio State University. Journal of Money, Credit and Banking. Vol. 46, No. 4.
+14.	Gertler, M. Karadi, P. (2010). A model of Unconventional Monetary Policy. NYU.
+15.	Joyce, M., Miles, D., Scott, A., Vayanos, D. (2012). Quantitative easing and unconventional monetary policy – an introduction. The economic journal No. 122.
+16.	Lavigne, R., Sarker, S., Vasishtha, G. (2014). Spillover Effects of Quantitative Easing on Emerging – Market Economies. Bank of Canada Review. 
+17.	Tillmann, P. (2015). Unconventional Monetary Policy and the Spillovers to Emerging Markets. Justus – Liebig – University GieBen.
+18.	Woodford, M., Cúrdia, V. (2010). Conventional and Unconventional Monetary Policy. Federal Reserve Bank of St. Louis Review.
+
+
+
+
+```{r Identificación, echo = FALSE, results='asis', warning = FALSE, message=FALSE}
+
+# Regresiones
+
+reg.yield <- feols(Yields ~ D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23 + D24 + D25 | Country, data = yields, se = "standard")
+
+
+         
+reg.SI <- feols(SI ~ D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23 + D24 + D25 | Country, data = stock_market, se = "standard")
+
+
+reg.fx <- feols(FX ~ D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23 + D24 + D25 | Country, data = fx, se = "standard")
+
+# a <- plm(Values ~ D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + 
+#            D19 + D20 + D21 + D22 + D23 + D24 + D25 , index = "Country", data = fx, model = "within")
+# summary(a)
+
+```
+
+
+
+
+```{r p1, echo = FALSE, results='asis', message=FALSE}
+etable(reg.yield, 
+       reg.SI,
+       reg.fx,
+       title = "1er Modelo: Efecto sobre activos en las fechas seleccionadas",
+       keep = "D[[:digit:]]$",
+       float = TRUE,
+       fitstat = c("n", "r2"),
+       placement = "H",
+       digits = 2,
+       tex = TRUE)
+```
+
+
+
+```{r p2, echo = FALSE, results='asis', message=FALSE}
+etable(reg.yield, 
+       reg.SI,
+       reg.fx,
+       title = "1er Modelo: Efecto sobre activos en las fechas seleccionadas (Continuación)",
+       keep = "D[[:digit:]]{2}",
+       float = TRUE,
+       fitstat = c("n", "r2"),
+       placement = "H",
+       digits = 2,
+       tex = TRUE)
+```

@@ -1,0 +1,568 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+%
+\documentclass[
+  9.5pt,
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+  \setmainfont[]{Times New Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Políticas monetarias no convenciales en US y su efecto en Latinoamérica},
+  pdfauthor={Jesús Gustavo Hernández Herrerías},
+  colorlinks=true,
+  linkcolor=Maroon,
+  filecolor=Maroon,
+  citecolor=Blue,
+  urlcolor=blue,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{float}
+\usepackage{booktabs}
+\floatplacement{figure}{H}
+\usepackage{pdflscape}
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{epsfig}
+\usepackage{multirow}
+\usepackage{colortbl}
+\usepackage{geometry}
+\geometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+
+\title{Políticas monetarias no convenciales en US y su efecto en Latinoamérica}
+\author{Jesús Gustavo Hernández Herrerías}
+\date{2021}
+
+\begin{document}
+\maketitle
+
+\pagenumbering{arabic}
+
+\textbf{\textcolor{BlueViolet}{1    INTRODUCCIÓN}}
+
+La principal contribución de este trabajo es analizar si la política
+monetaria no convencional en Estados Unidos generó un impacto
+significativo para las economías de Latinoamérica entre 2008 y 2015,
+debido a que se cambió el enfoque tradicional de la política monetaria
+por la magnitud de la crisis. Los principales motivos por los cuáles se
+espera que el efecto para las economías de Latinoamérica sea
+significativo, es por su fuerte dependencia al dólar y, que en
+ocasiones, un gran porcentaje de su deuda se encuentran denominada en
+esta moneda, vínculos financieros fuertes con Estados Unidos dentro de
+la región y la relevancia que para estos países representan las
+exportaciones de materias primas cuyos precios se encuentran denominados
+en dólares.
+
+La segunda contribución es identificar si el papel que juegan los
+fundamentales en condicionar la respuesta de los países de Latinoamérica
+a las políticas monetarias no convencionales de Estados Unidos difiere a
+lo largo de los distintos episodios.
+
+A lo largo de diversos estudios se han identificado las siguientes
+características: en primer lugar, estos instrumentos de política
+monetaria no convencional han contribuido a mejorar las condiciones
+financieras. En segundo lugar, los efectos subsecuentes de estos
+programas suelen ser menores con el paso del tiempo. Tercero, los
+principales canales de transmisión de la política monetaria no
+convencional son:
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\item
+  Canal de balance de portafolio: La compra de activos de larga duración
+  por parte de la Reserva Federal, bonos respaldados por hipotecas y
+  bonos del gobierno, llevan a una disminución de la oferta de estos
+  activos, lo que provoca una reducción en el rendimiento de los mismos
+  y un efecto sustitución hacia otros activos de mayor riesgo en busca
+  de mayor rendimiento, principalmente hacia mercados emergentes. Este
+  efecto provoca una disminución en las primas de riesgo, incrementa el
+  precio de los activos y disminuye los rendimientos en mercado
+  emergentes.
+\item
+  Canal de señalización: Cuando las expectativas de que la política
+  monetaria acomodaticia permanecerá por cierto periodo de tiempo,
+  manteniendo las tasas de referencia bajas, el componente de riesgo
+  neutral del rendimiento de los bonos suele disminuir. El diferencial
+  de tasas de interés con respecto a los mercados emergentes tiende a
+  ser persistente, lo que provoca flujo de capitales hacía estos
+  mercados.\footnote{Lavigne R., Sarker S. y Vasishtha G. (2014). Spillover Effects of Quantitative Easing on Emerging - Market Economies. [Documento en línea] Bank of Canada.}
+\item
+  Canal de tipo de cambio: La salida de flujos de Estados Unidos en
+  busca de mayor rendimiento, provoca que el dólar se deprecie y con
+  ello que la demanda por bienes y servicios foráneos disminuya en
+  detrimento de las exportaciones de mercados emergentes. La apreciación
+  en las monedas de los países emergentes, ceteris paribus depende de la
+  cantidad de flujos que entren a cada país.
+\end{enumerate}
+
+A lo largo del periodo que va de 2008 a 2015, se observaron distintas
+fases de la política monetaria no convencional de la Reserva Federal,
+las compras de activos a gran escala (LSAP, por sus siglas en inglés),
+el programa de extensión de madurez (MEP, por sus siglas en inglés) y el
+periodo de disminución de compra de activos mejor conocido como ``Taper
+Talk Period'' que se caracterizó por ser un episodio de volatilidad en
+los mercados internacionales financieros. Los efectos que provocaron
+tanto en Estados Unidos como en los mercados emergentes fueron
+desiguales, tanto en la fase que se encontraba la política monetaria,
+así como las características particulares del país y su relación con
+Estados Unidos.
+
+En primer lugar, se estiman los efectos sobre los bonos gubernamentales
+y los tipos de cambio para 5 países de la región de Latinoamérica, este
+es un enfoque que toma en cuenta las reacciones de los países a través
+de movimientos en ciertos activos financieros. En la segunda parte, se
+estima un modelo simple que mide la influencia de los fundamentales
+macroeconómicos específicos de cada país en la transmisión de las
+perturbaciones financieras de Estados Unidos.
+
+\textbf{\textcolor{BlueViolet}{2   METODOLOGÍA}}
+
+\textbf{\textcolor{BlueViolet}{2.1   Estrategia empírica y descripción de variables}}
+
+El modelo a estimar se basa en Borallo et al.~(2016), donde a través de
+un modelo de estudio de eventos se analiza los efectos de los cambios de
+política monetaria en Estados Unidos. Las ecuaciones 1 y 2 muestran la
+forma funcional de los modelos que se pretenden analizar.
+
+\textbf{1er modelo}
+
+\begin{equation}
+\Delta Y_{it} = \alpha_i+ \sum_{j=1}^{25}\beta_j D_j + \epsilon_{it}
+\end{equation}
+
+donde:
+
+\(y_{it}\) el cambio de dos días en el precio de los activos (del día
+previo al día posterior) \(y_{it+1}- y_{it-1}\)
+
+\(\sum_{j=1}^{25}\) denota los anuncios de política monetaria
+contemplados para este análisis
+
+\(\alpha_i\) denota un efecto fijo del país
+
+\(D_j\) denota la dummy de cada evento
+
+\(\beta_j\) denota el coeficiente asociado con la dummy de cada evento
+
+\textbf{2do modelo}
+
+\begin{equation}
+\Delta Y_{ij} = \alpha_i+ \beta D_j^s + \gamma CC_{it-1} + \delta D_j^s CC_{it-1} +\epsilon_{it}
+\end{equation}
+
+donde:
+
+\(y_{ij}\) el cambio de dos días en el precio de los activos (del día
+previo al día posterior) \(y_{it+1}- y_{it-1}\) en el país \(i\) en la
+fecha \(j\)
+
+\(CC_{it-1}\) denota las características de los países
+
+\(D_j^{s}\) denota la dummy de cada evento que fueron significativos en
+el primer modelo
+
+\(D_j^{s}CC_{it-1}\) denota la interacción entre las dummies de los
+eventos significativos y las características de los países
+
+\textbf{\textcolor{BlueViolet}{2.2   Identificación}}
+
+Es un modelo de datos panel que analiza el cambio en los mercados
+extranjeros después del anuncio de política monetaria, bajo el supuesto
+de que las noticias económicas no afectan la decisión de política en ese
+periodo corto de tiempo.
+
+Por simplicidad, se evita hacer la diferenciación que algunos otros
+estudios realizan, de distinguir en los anuncios entre el impacto y las
+intenciones futuras sobre la política y se procede a considerar estos
+eventos como no anticipados.
+
+\textbf{\textcolor{BlueViolet}{2.3   Descripción de datos}}
+
+Se utilizan datos diarios del 1 de octubre del 2008 al 24 de abril del
+2015 para tres tipos de activos, rendimientos de los bonos soberanos de
+10 años en moneda local y tipos de cambio bilateral relativo al dólar
+americano para 5 países de Latam:
+
+\newlist{multiitem}{itemize}{1}
+\setlist[multiitem]{
+    label=\textbullet,
+    before=\begin{multicols}{2},
+    after=\end{multicols}
+}
+
+\begin{multiitem}
+    \item Brasil
+    \item Chile
+    \item Colombia
+    \item México
+    \item Perú
+\end{multiitem}
+
+De igual forma los fundamentales macroecónomicos que se incluyen son los
+siguientes: Proxy de crecimiento del PIB mensual, inflación mensual,
+Credit Default Swap de 5 años, deuda como proporción del PIB, cuenta
+corriente como proporción del PIB.
+
+La tabla 4 en el anexo, describe un conjunto de anuncios oficiales y
+discursos por parte de la Reserva Federal que se caracterizaron por
+incluir la implementación de instrumentos no convencionales de política
+monetaria desde noviembre del 2008.
+
+\textbf{\textcolor{BlueViolet}{2.4   Estadísticos descriptivos}}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\tightlist
+\item
+  Tipo de cambio con respecto al dólar
+\end{enumerate}
+
+Se puede observar como para los países observados de la muestra hubo
+variaciones de entre 5\% a 10\% con respecto a su media, lo que
+mostraría que fue un episodio de mucha volatilidad. Así como en el
+gráfico se puede observar que el índice de monedas de Latam se
+depreciaba, al subir, cuando al mismo tiempo el indice para el dólar
+ganaba valor para los periodos posteriores al 2014 y con un
+comportamiento inverso en el periodo de ``QE''.
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País    & Obs.  & Media & D.e.  & Min   & Max \\ \hline
+Brasil  & 1604 &    2.03     & 0.33 &   1.53    & 3.29 \\
+Chile   & 1639  & 527.18 &  51.34 & 456.38 &    682.75 \\
+Colombia    & 1638 &    1968.22 & 206.55    & 1748.50   & 2687.79 \\
+México  & 1638  & 13.06 & 0.76  & 11.19 & 15.62 \\
+Perú    & 1631  & 2.81  & 0.15 &    2.53 &  3.25 \\ \hline
+    \end{tabular}
+    \caption{Tipo de cambio con respecto al dólar}
+  \end{center}
+\end{table}
+
+\includegraphics{FX.png}
+
+A continuación se presentan los estadísticos descriptivos de algunos
+fundamentales de los países de Latam, como proxy de crecimiento e
+inflación, para contextualizar que algunos países para el periodo de
+análisis tenían niveles bajos de crecimiento y con niveles altos de
+inflación, por encima de la meta de su banco central, lo que pudo haber
+influido en un mayor o menor impacto ante las políticas monetarias no
+convencionales de la Reserva Federal.
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Proxy de crecimiento económico
+\end{enumerate}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País    & Obs.  & Media & D.e.  & Min   & Max \\ \hline
+Brasil  & 1902  & 2.99 &    3.84 &  -4.94   & 12.23 \\
+Chile   & 1802  & 4.38 &    2.87    & -3.8  & 12.63 \\
+Colombia    & 1863  & 4.50 & 2.21 & -0.8 &  8.97 \\
+México  & 1863  & 2.23  & 3.49  & -11   & 7.44 \\
+Perú    & 1902  & 5.80 &    2.79 &  7.44 & 12.83 \\ \hline
+    \end{tabular}
+    \caption{Proxy de crecimiento económico mensual }
+  \end{center}
+\end{table}
+
+\begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\setcounter{enumi}{2}
+\tightlist
+\item
+  Inflación
+\end{enumerate}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{| c | c | c | c | c | c |}
+      \hline
+País    & Obs.  & Media & D.e.  & Min   & Max \\ \hline
+Brasil  & 1561  & 5.76 &    0.79 &  4.17    & 7.31 \\
+Chile   & 1561  & 2.80 &    2.12    & -2.30 & 9.80 \\
+Colombia    & 1561  & 3.18 & 1.39 & 1.76 &  7.94 \\
+México  & 1561  & 4.22  & 0.86  & 3.04  & 6.53 \\
+Perú    & 1561  & 3.07 &    1.38 &  0.25 & 6.75 \\ \hline
+    \end{tabular}
+    \caption{Inflación mensual }
+  \end{center}
+\end{table}
+
+\textbf{\textcolor{BlueViolet}{3   RESULTADOS}}
+
+Los resultados de este trabajo son consistentes con la literatura. El
+análisis de datos panel bajo el estudio de eventos de política monetaria
+no convencional muestran un mayor efecto significativo para los precios
+de los activos de Latinoamérica con el primer anuncio de ciclo de
+expansión cuantitativa en el 2008 -- 2009 y con el periodo de
+disminución de compra de activos en el 2013, así como una mayor
+respuesta para el rendimiento de los bonos soberanos y los tipos de
+cambio de las economías de Latinoamérica. De igual forma, las
+características de los países fueron más decisivas para explicar las
+diferencias en la reacción a los anuncios de QE que en respuesta a las
+noticias sobre el proceso de puesta a punto.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Mercados de bonos
+\end{enumerate}
+
+En la tabla 6, columna 2, se puede observar que las variaciones de los
+bonos fueron más significativas en el LSAP-1 con una disminución
+promedio de 28 puntos básicos, cuando el promedio para el periodo
+seleccionado fue una disminución de 3.8 puntos básicos.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\tightlist
+\item
+  Tipos de cambio
+\end{enumerate}
+
+En la tabla 6, columna 3, se puede observar que en el LSAP-1 los datos
+resultaron ser más significativos. En primer lugar se puede observar un
+efecto de depreciación (signo positivo) para las primeras fechas del
+LSAP-1 y posteriormente una apreciación (signo negativo) en el 2009.
+
+Esto se puede explicar debido a que en un principio los inversionistas
+comenzaron a mover los capitales hacia activos más seguros, para después
+mediante un rebalanceo de portafolios buscar rendimiento en los países
+emergentes y principalmente en aquellos que tuvieran un mayor
+diferencial de tasas como en el caso de México y Brasil.
+
+De igual forma el periodo del segundo semestre del 2013 cuando se
+comenzaba a sugerir la moderación o el final de la política monetaria
+expansiva, tuvo un efecto significativo depreciando las monedas.
+
+3.- Modelo con fundamentales macroeconómicos
+
+En la tabla 7, se puede observar que en la mitad de los casos la dummy
+para el LSAP1 fueron significativos, lo que indica la relevancia de esta
+variable en la transmisión de los choques de política monetaria. Hay dos
+características de los países que interactúan con el primer grupo de
+políticas de la FED: la inflación y la deuda como proporción del PIB. El
+signo para el caso de la inflación puede responder a que para un periodo
+en el que la gran mayoría de las monedas de Latam se apreciaron, al
+tener inflación alta y ofrecer mayores niveles de tasa que otros países,
+el nivel de carry pudo haber resultado más atractivo, como el caso de
+México y Brasil.
+
+Para el periodo de Taper la gran mayoría de las variables estructurales
+no son significativas, salvo la inflación de nueva cuenta.
+
+\textbf{\textcolor{BlueViolet}{4   REFERENCIAS}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Anaya, P., Hachula, M., Offermanns, C. (2015). Spillovers of U.S.
+  Unconventional Monetary Policy to Emerging Markets: The Roles of
+  Capital Flows. Freie Univerität Berlin, School of Business \&
+  Economics.
+\item
+  Bank for International Settlements (2014). The Transmission of
+  unconventional monetary policy to the emerging markets. Bank of
+  International Settlements. BIS Papers No.~78.
+\item
+  Baumesiter, C., Benati, L. (2013). Unconventional Monetary Policy and
+  the Great Recession. Bank of Canada \& Banque de France.
+\item
+  Bhattarai, S., Chatterjee, A., Yong Park W. (2018). Effects of US
+  Quantitative Easing on Emerging Market Economies. ABD Institute. ABDI
+  Working Paper Series No.803.
+\item
+  Borallo, F., Hernando, I., Vallés, J. (2016). The effects of US
+  Unconventional Monetary Policies in Latin America. Banco de España.
+  Documentos de Trabajo No.~1606.
+\end{enumerate}
+
+\textbf{\textcolor{BlueViolet}{5   ANEXOS}}
+
+\begin{table}[H]
+  \begin{center}
+  \resizebox{18cm}{18cm} {
+    \begin{tabular}{| m{3cm} | m{5cm} | m{15cm} |}
+      \hline
+\multicolumn{3}{|c|}{Juntas del Comité Federal de Mercado Abierto (CFMA) y eventos importantes (Nov 2008 - Oct 2014)} \\ \hline
+\rowcolor{Gray}\multicolumn{3}{|c|}{"First Large Scale Asset Purchase" (LSAP)} \\ \hline
+11/25/2008   & Anuncio &    La Reserva Federal anuncia la compra de "Mortage Back Securities" respaldadas por agencias del gobierno y la creación del "Term Asset Backed Securities Loan Facility" \\
+12/01/2008  & Discurso (Austin) & Bernanke da pistas de posibles futuras compras de bonos gubernamentales \\
+12/16/2008  & Declaración CFMA  & La Reserva Federal recorta la tasa de fondos federales a cero \\
+01/28/2009  & Declaración CFMA  & La Reserva Federal anuncia "Primary Dealer Credit Facility", "Term Securities Lending Facility" y AMLF \\
+03/18/2009  & Declaración CFMA &    La Reserva Federal extiende su programa de compras de MBS y anuncia el comienzo de compras de bonos gubernamentales \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Second LSAP"} \\ \hline
+08/10/2010  & Declaración CFMA &    La Reserva Federal anuncia sus intenciones de comprar bonos gubernamentales de largo plazo a través de la reinversión de los pagos de sus MBS \\
+08/27/2010  & Discurso (Jackson Hole) & Discurso de Bernanke en Jackson Hole \\
+09/21/2010  & Declaración CFMA  & De acuerdo al CFMA, la tasa de interés de corto plazo se mantendrá en niveles bajos por un largo periodo de tiempo \\
+10/15/2010  & Discurso (Indiana) &  De acuerdo con el presidente de la Reserva Federal Bernanke, nuevas medidas podrían ser necesarias \\
+11/02/2010  & Declaración CFMA &    La Reserva Federal decide comprar 600 billones de dólares adicionales  de bonos gubernamentales de largo plazo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Maturity Extension Program" (MEP)} \\ \hline
+08/09/2011  & Declaración CFMA &    De acuerdo al CFMA, la tasa de interés de corto plazo se mantendrá en niveles bajos por un largo periodo de tiempo y tomarán nuevas medidas si resultan necesarias \\
+08/26/2011  & Discurso  & Discurso de Bernanke en Jackson Hole \\
+09/21/2011  & Declaración CFMA &    La Reserva Federal anuncia su "Maturity Expansion Program" \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Third LSAP"} \\ \hline
+08/22/2012  & Minutas CFMA &    La Reserva Federal tomará nuevas medidas en caso de ser necesarias \\
+08/31/2012  & Discurso (Jackson Hole) & El presidente de la Reserva Federal Bernanke sugiere nuevo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Quantitative Easing"} \\ \hline
+09/13/2012  & Declaración CFMA &    La Reserva Federal anuncia nuevo "Quantitative Easing"
+Eventos en el 2013 \\
+03/20/2013  & Declaración CFMA  & La Reserva Federal continuará con su política monetaria acomodaticia hasta que ciertos objetivos de desempleo e inflación sean alcanzados \\
+05/01/2013  & Declaración CFMA &    CFMA: la política monetaria acomodaticia se mantendrá por un largo periodo de tiempo \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{"Taper Talk Period"} \\ \hline
+05/22/2013  & Testimonio y minutas CFMA &   Bernake sugiere el final de la política monetaria expansiva \\
+06/19/2013  & Declaración CFMA  & La Reserva Federal sugiere que el periodo de disminución podría comenzar el próximo año \\
+07/11/2013  & Minutas CFMA y discurso(NBER) & Bernanke dice que la política monetaria de flexibilización del banco central podría continuar en el futuro inmediato \\
+10/30/2013 & Declaración CFMA   & La Reserva Federal decide continuar con la política monetaria acomodaticia \\
+12/18/2013  & Declaración CFMA &    Periodo de disminución se anuncia oficialmente  \\
+\rowcolor{Gray}\multicolumn{3}{|c|}{Eventos en el 2014} \\ \hline
+09/17/2014  & Declaración CFMA  & Anuncio de los principios y planes de normalización de la política \\
+10/29/2014 &    Declaración CFMA &  Concluye el periodo de disminución de compra de activos; empieza  un periodo indefinido de orientación hacia adelante \\ \hline
+    \end{tabular}
+  }
+    \caption{Anuncios oficiales y discursos oficiales de la reserva federal}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+  \resizebox{12cm}{10cm} {
+    \begin{tabular}{| c | c | c |}
+      \hline
+\rowcolor{Gray}Variables    & Descripción   & Fuente \\ \hline
+Bonos soberanos & 10 años en moneda local   & Bloomberg \\ \hline
+Tipo de cambio  & Bilateral con respecto al dólar   & Bloomberg \\ \hline
+Índices bursátiles  & Agregado  & Bloomberg \\ \hline
+Proxy crecimiento del PIB mensual & Variación anual & Bloomberg \\ \hline
+Inflación mensual & Variación anual & Bloomberg \\ \hline
+Credit default swap  & 5 años en USD & Bloomberg \\ \hline
+Tasa de política monetaria & Porcentaje & Bloomberg \\ \hline
+Cuenta corriente como proporción del PIB &  Porcentaje & Bloomberg \\ \hline
+Deuda como proporción del PIB & Porcentaje  & Bloomberg \\ \hline
+Reservas como proporción del PIB & Porcentaje & Bloomberg \\ \hline
+    \end{tabular}
+  }
+    \caption{Definición de variables}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{ m{3cm}  c  c }
+      \hline
+Variables dep.  & Rendimiento de bonos  & Tipo de cambio  \\ \hline
+11/25/2008  & -0.35***  & -3.3 \\
+12/01/2008 & -0.51***   & 3.4 \\
+12/16/2008 & -0.25***   & -17.8 \\
+01/28/2009 & -0.15**    & 12.8 \\
+03/18/2009 & -0.17* & -10.9 \\
+08/10/2010 & -0.02  & -1.4 \\
+08/27/2010 & 0.06   & 1.3 \\
+09/21/2010 & 0.010  & -0.71 \\
+10/15/2010 & 0.03   & 2.0 \\
+11/02/2010 & -0.06  & -8.4 \\
+08/09/2011 & -0.17  & -3.6 \\
+08/26/2011 & -0.14  & -1.2 \\
+09/21/2011 & 0.07   & 16.4*** \\
+08/22/2012 & -0.03  & -1.5 \\
+08/31/2012 & -0.01  & -1.0 \\
+09/13/2012 & 0.05   & -2.6 \\
+03/20/2013 & 0.07   & 1.5 \\
+05/01/2013 & -0.05  & 2.7 \\
+05/22/2013 & 0.15** & 4.3 \\
+06/19/2013 & 0.40***    & 9.9** \\
+07/11/2013 & -0.06  & -3.8 \\
+10/30/2013 & 0.09   & 2.5 \\
+12/18/2013 & 0.02   & -0.29 \\
+09/17/2014 & 0.03   & 0.37 \\
+10/29/2014 & 0.05   & -1.6 \\ \hline
+Efectos fijos por país  & Sí    & Sí \\ \hline
+Observaciones   & 6,015 & 8,097 \\
+R-squared   & 0.019 & 0.006 \\ \hline
+    \end{tabular}
+    \caption{1er Modelo: Efecto sobre activos en las fechas seleccionadas}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{ m{3cm}  c  c  c  c }
+      \hline
+& \multicolumn{2}{|c|} {LSAP1} & {TAPER} \\ \hline  
+Variables & Dummy ($\beta$) & DummyCC ($\delta$) & Dummy ($\beta$) & DummyCC ($\delta$) \\ \hline
+PIB & -9.7**    & 1.1 & 3.8 & 0.69 \\
+Inflación & 24.9*   & -5.2** & 16*** & -2.7*\\
+Deuda como % del PIB & 8.3  & -0.66** &  6.5 & 0.02\\
+CDS & 20.5  & -0.09** & 8.0 & -0.007 \\
+Cuenta corriente & 6.7  & 5.1 & -5.7 & -3.4 \\ \hline
+    \end{tabular}
+    \caption{2do Modelo: Efecto sobre el tipo de cambio}
+  \end{center}
+\end{table}
+
+\end{document}
