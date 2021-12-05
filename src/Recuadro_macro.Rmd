@@ -609,10 +609,8 @@ Tipo de cambio	& Bilateral con respecto al dólar	& Bloomberg \\ \hline
 Proxy crecimiento del PIB mensual & Variación anual & Bloomberg \\ \hline
 Inflación mensual & Variación anual & Bloomberg \\ \hline
 Credit default swap  & 5 años en USD & Bloomberg \\ \hline
-Tasa de política monetaria & Porcentaje & Bloomberg \\ \hline
 Cuenta corriente como proporción del PIB &  Porcentaje & Bloomberg \\ \hline
 Deuda como proporción del PIB & Porcentaje  & Bloomberg \\ \hline
-Reservas como proporción del PIB & Porcentaje & Bloomberg \\ \hline
     \end{tabular}
   }
     \caption{Definición de variables}
