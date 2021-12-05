@@ -418,7 +418,7 @@ Perú	& 1631	& 2.81	& 0.15 &	2.53 &	3.25 \\ \hline
 <!--   \end{center} -->
 <!-- \end{table} -->
 
-```{r, echo = FALSE}
+```{r gráfico, echo = FALSE}
 
 g3 <- FXfig %>%
     select(date, dxy, citi_latam_fx) %>% 
@@ -685,7 +685,7 @@ Cuenta corriente & 6.7	& 5.1 & -5.7 & -3.4 \\ \hline
 
 <!-- ```{r Identificación, echo = FALSE, results='asis', warning = FALSE, message=FALSE} -->
 
-<!-- # Regresiones -->
+<!-- # Regresiones con fundamentales-->
 
 <!-- reg.yield <- feols(Yields ~ D1 + D2 + D3 + D4 + D5 + D6 + D7 + D8 + D9 + D10 + D11 + D12 + D13 + D14 + D15 + D16 + D17 + D18 + D19 + D20 + D21 + D22 + D23 + D24 + D25 | Country, data = yields, se = "standard") -->
 

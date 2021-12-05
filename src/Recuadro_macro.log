@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.12.4)  5 DEC 2021 15:25
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021/W32TeX) (preloaded format=xelatex 2021.12.4)  5 DEC 2021 15:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1180,25 +1180,24 @@ LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
 ]
 \enitdp@multiitem=\count320
 [2]
-File: Recuadro_macro_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (typ
-e pdf)
-<use Recuadro_macro_files/figure-latex/unnamed-chunk-1-1.pdf>
-[3]
-Overfull \hbox (11.67233pt too wide) in paragraph at lines 427--466
+File: FX.png Graphic file (type bmp)
+<FX.png>
+[3] [4]
+Overfull \hbox (11.67233pt too wide) in paragraph at lines 449--488
  [] 
  []
 
-[4] [5] [6] (./Recuadro_macro.aux)
+[5] [6] (./Recuadro_macro.aux)
 Package rerunfilecheck Info: File `Recuadro_macro.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
  17430 strings out of 478256
- 328186 string characters out of 5854045
- 820767 words of memory out of 5000000
+ 327782 string characters out of 5854045
+ 815767 words of memory out of 5000000
  37703 multiletter control sequences out of 15000+600000
  409929 words of font info for 86 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 86i,12n,122p,308b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,12n,122p,308b,438s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on Recuadro_macro.pdf (6 pages).
